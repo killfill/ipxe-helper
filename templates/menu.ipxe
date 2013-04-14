@@ -558,7 +558,8 @@ kernel ${base-url}/kernel/amd64/unix
 module ${base-url}/amd64/boot_archive
 # See http://wiki.smartos.org/display/DOC/Getting+Started+with+SmartOS
 # smartos=true to run zpool "installer" (and disable noimport=true)
-imgargs unix -v -B console=text,standalone=true,noimport=true,keyboard-layout=norway,root_shadow='$1$RKv<your-encrypted-password-here>eQCWk.'
+imgargs unix -B console=text,standalone=true,keyboard-layout=es,root_shadow='$2a$10$T6qy2363Kbu.GFqD25Hb4OpbhhLRAvrbnmXjc/hQgcWgzc85S2JB2'
+#imgargs unix -v -B console=text,standalone=true,noimport=true,keyboard-layout=norway,root_shadow='$1$RKv<your-encrypted-password-here>eQCWk.'
 #imgargs unix -v -B console=text,standalone=true,smartos=true,keyboard-layout=norway,root_shadow='$1$RKv<your-encrypted-password-here>eQCWk.'
 boot || goto failed
 goto start

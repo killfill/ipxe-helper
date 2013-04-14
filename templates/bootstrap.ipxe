@@ -4,6 +4,9 @@ set boot-url http://pxe.images.lan
 set bootstrap-url ${boot-url}/bootstrap
 set menu-url ${boot-url}/menu.ipxe
  
+#If this script got embeded, probably we dont have an ip jet..
+isset ${ip} || dhcp
+
 # Boot <boot-url>/bootstrap/hostname-<hostname>.ipxe
 # if hostname DHCP variable is set and script is present
 isset ${hostname} && chain --replace --autofree ${bootstrap-url}/hostname-${hostname}.ipxe && exit ||

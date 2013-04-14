@@ -2,10 +2,9 @@
 
 . common.sh
 
-
+log "Cloning ipxe source"
 git clone -q git://git.ipxe.org/ipxe.git 
 
-log "Updating ipxe"; 
 cd ipxe; 
 git pull || error "No git?..."
 
