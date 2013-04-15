@@ -143,10 +143,15 @@ echo Booting SystemRescueCD 2.6.0 x86 for ${initiator-iqn}
 #   perl -p -i -e 's{rescuecd_us}{rescuecd_no}; s{US}{NO}; s{setkmap=us}{setkmap=no}; s{american}{norwegian};' isolinux.cfg && \
 #   cd -
 # PXELinux options, see http://syslinux.zytor.com/wiki/index.php/PXELINUX for details
-set 210:string ${boot-url}/sysrcd-2.6.0-x86/isolinux/
-set 209:string isolinux.cfg
-set filename ${210:string}pxelinux.0
-chain ${filename} || goto failed
+#set 210:string ${boot-url}/sysrcd-2.6.0-x86/isolinux/
+#set 209:string isolinux.cfg
+#set filename ${210:string}pxelinux.0
+#chain ${filename} || goto failed
+kernel ${boot-url}/memdisk
+initrd ${boot-url}/systemrescue/systemrescuecd-x86-3.5.0.iso
+boot
+#echo sanboot --no-describe ${boot-url}/systemrescue/systemrescuecd-x86-3.5.0.iso 
+#chain ${boot-url}/systemrescue/systemrescuecd-x86-3.5.0.iso || goto failed
 goto start
  
 :macrium-winpe
@@ -548,17 +553,18 @@ boot || goto failed
 goto start
  
 :smartos
-echo Starting SmartOS for ${initiator-iqn}
+#echo Starting SmartOS for ${initiator-iqn}
 # Hook zones drive (optional)
-set root-path ${base-iscsi}:${hostname}.boot.smartos
-sanhook ${root-path} ||
+#set root-path ${base-iscsi}:${hostname}.boot.smartos
+#sanhook ${root-path} ||
 # See http://nahamu.github.com/2011/08/17/smartos-pxe.html for details
 set base-url ${boot-url}/smartos/platform/i86pc
 kernel ${base-url}/kernel/amd64/unix
 module ${base-url}/amd64/boot_archive
 # See http://wiki.smartos.org/display/DOC/Getting+Started+with+SmartOS
 # smartos=true to run zpool "installer" (and disable noimport=true)
-imgargs unix -B console=text,standalone=true,keyboard-layout=es,root_shadow='$2a$10$T6qy2363Kbu.GFqD25Hb4OpbhhLRAvrbnmXjc/hQgcWgzc85S2JB2'
+imgargs unix -B smartos=true
+#imgargs unix -B console=text,standalone=true,smartos=true,keyboard-layout=es,root_shadow='$2a$10$T6qy2363Kbu.GFqD25Hb4OpbhhLRAvrbnmXjc/hQgcWgzc85S2JB2'
 #imgargs unix -v -B console=text,standalone=true,noimport=true,keyboard-layout=norway,root_shadow='$1$RKv<your-encrypted-password-here>eQCWk.'
 #imgargs unix -v -B console=text,standalone=true,smartos=true,keyboard-layout=norway,root_shadow='$1$RKv<your-encrypted-password-here>eQCWk.'
 boot || goto failed
