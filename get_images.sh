@@ -56,7 +56,9 @@ function MemTest86 {
 
 function end {
 	echo
-	log "Done, copy $IMAGES over your http server"
+	log "Done, sync $IMAGES over your http server"
+	log "i.e. scp -r templates/* root@10.2.0.254:/usr/local/www/nginx/"
+	log "     scp -r images/* root@10.2.0.254:/usr/local/www/nginx/"
 }
 
 #CONFIG
