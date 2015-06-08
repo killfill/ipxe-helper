@@ -43,7 +43,7 @@ function MemTest86 {
 	log "MemTest86 - $name"
 
 	filezip="memtest86-iso.zip"
-	fileiso="Memtest86-6.0.0.iso"
+	fileiso="Memtest86-6.1.0.iso"
 
 	test -e "$IMAGES/memtest86/${fileiso}" && log " Skipping" && return 0
 
@@ -72,26 +72,26 @@ function HDT {
 }
 
 function Ubuntu {
+
+	#URLs from http://cdimage.ubuntu.com/netboot/
+
 	version=$1
-	file="ubuntu-${version}-server-amd64.iso"
+	arch=$2
 
-	log "Ubuntu - $version"
+	log "Ubuntu netinstall - $version $arch"
 
-	test -e "$IMAGES/ubuntu/$file" && log " Skipping" && return 0
-	test -e "$file" || curl -O "http://releases.ubuntu.com/14.04.02/${file}" || error "Could not download image"
+	test -e "$IMAGES/ubuntu/linux" && log " Skipping" && return 0
 
+	mkdir -p ubuntu
+	cd ubuntu
 
-	OS=`uname -s`
-	if [ $OS == "Darwin" ]; then
-		echo "Extract the iso with 'The Unarchiver' and press enter to continue"
-		read lala
-	else
-		mkdir -p ubuntu-14.04-server-amd64
-		mount -o loop -t iso9660 ubuntu-14.04-server-amd64.iso ubuntu-14.04-server-amd64/
-	fi
+	url="http://archive.ubuntu.com/ubuntu/dists/${version}-updates/main/installer-${arch}/current/images/netboot/ubuntu-installer/${arch}"
 
-	mkdir -p $IMAGES/ubuntu/
-	cp $file $IMAGES/ubuntu/
+	test -e initrd.gz || wget $url/initrd.gz || error "Could not download initrd.gz"
+	test -e linux || wget $url/linux || error "Could not download linux"
+
+	cd ..
+	cp -rip ubuntu $IMAGES
 }
 
 function end {
@@ -108,5 +108,4 @@ function end {
 #Need to check out ubuntu... probable will need a preseed.cfg file.. :S
 #SmartOS 20150430T082110Z && SystemRescue 4.5.2 && MemTest86 && HDT 0.5.2 && Ubuntu 14.04.2 && end
 
-SmartOS 20150430T082110Z && SystemRescue 4.5.2 && MemTest86 && HDT 0.5.2 && end
-
+SmartOS 20150430T082110Z && Ubuntu trusty amd64 && SystemRescue 4.5.2 && MemTest86 && HDT 0.5.2 && end

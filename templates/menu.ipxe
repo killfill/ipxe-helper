@@ -58,29 +58,17 @@ goto shell
 set base-url ${boot-url}/images/smartos/platform/i86pc
 kernel ${base-url}/kernel/amd64/unix
 module ${base-url}/amd64/boot_archive
+#imgargs unix -B smartos=true,standalone=true,noimport=true
 imgargs unix -B smartos=true
 boot || goto failed
 goto start
 
 :ubuntu
-#set root-path ${base-iscsi}:${hostname}.boot.ubuntu
-#set root-path ${boot-url}/images/ubuntu/ubuntu-14.04.2-server-amd64.iso
-#chain ${root-path} iso || goto failed
-initrd ${base-url}/images/ubuntu/ubuntu-14.04.2-server-amd64/install/netboot/ubuntu-installer/amd64/initrd.gz
-chain ${base-url}/images/ubuntu/ubuntu-14.04.2-server-amd64/install/netboot/ubuntu-installer/amd64/linux url=http://preseed.panticz.de/preseed/ubuntu-minimal.seed auto=true netcfg/choose_interface=${net0/mac} locale=en_US.UTF-8 priority=critical biosdevname=0
+set base-url ${boot-url}/images/ubuntu
+initrd ${base-url}/initrd.gz
+chain ${base-url}/linux
 
-#set base-url ${boot-url}/ubuntu-12.04-server-amd64
-#kernel ${base-url}/install/netboot/ubuntu-installer/amd64/linux
-#initrd ${base-url}/install/netboot/ubuntu-installer/amd64/initrd.gz
-#imgargs linux auto=true fb=false url=${base-url}/./preseed.cfg DEBCONF_DEBUG=5 netcfg/get_hostname=${hostname} partman-iscsi/login/address=10.1.1.10 partman-iscsi/login/targets=${base-iqn}:${hostname}.boot.ubuntu partman-iscsi/login/username=${username} partman-iscsi/login/password=${password}
-#boot || goto failed
-
-#set base-url ${boot-url}/ubuntu-12.04-server-amd64
-#kernel ${base-url}/install/netboot/ubuntu-installer/amd64/linux
-#initrd ${base-url}/install/netboot/ubuntu-installer/amd64/initrd.gz
-#imgargs linux auto=true fb=false url=${base-url}/./preseed.cfg
-#boot || goto failed
-#goto start
+#chain ${base-url}/linux url=http://preseed.panticz.de/preseed/ubuntu-minimal.seed auto=true netcfg/choose_interface=${net0/mac} locale=en_US.UTF-8 priority=critical biosdevname=0
 
 
 :vmware
